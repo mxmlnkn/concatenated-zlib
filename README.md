@@ -35,6 +35,26 @@ print(zlibng_concat_decode(c0 + c1))  # returns b"abcefg"
 ### benchmarks
 
 To reproduce:
+
+```bash
+git clone --recursive https://github.com/zlib-ng/zlib-ng.git
+cd zlib-ng/ && mkdir build && cd build
+cmake -DCMAKE_INSTALL_PREFIX=/opt/zlib-ng ..
+make -j $( nproc ) install
+export CPATH=/opt/zlib-ng/include
+export LD_LIBRARY_PATH="/opt/zlib-ng/lib:$LD_LIBRARY_PATH"
+export LIBRARY_PATH="/opt/zlib-ng/lib:$LIBRARY_PATH"
+
+python3 -m pip install --force-reinstall 'git+https://github.com/mxmlnkn/indexed_bzip2.git@zlib-support#egginfo=rapidgzip&subdirectory=python/rapidgzip'
+
+git clone --recursive https://github.com/ap--/concatenated-zlib.git
+cd concatenated-zlib/
+python3 -m pip install --user .
+cd bench
+python time_load_chunks.py
+```
+
+To reproduce:
 ```shell
 # ON A MAC YOU CAN INSTALL THE DEPENDECIES VIA homebrew
 brew install zlib zlib-ng libdeflate
